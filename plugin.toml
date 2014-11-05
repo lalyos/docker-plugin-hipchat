@@ -8,4 +8,6 @@ website_url = "http://github.com/lalyos/docker-plugin-hipchat"
 
 [plugin.config]
 
+message_format = "{.name, .image}"
+
 [plugin.compatibility]
