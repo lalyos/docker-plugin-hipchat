@@ -1,0 +1,11 @@
+[plugin]
+name = "docker-plugin-hipchat"
+description = "Send HipChat notifications"
+version = "1.0"
+maintainer_name = "Lajos Papp"
+maintainer_email = "lalyos@yahoo.com"
+website_url = "http://github.com/lalyos/docker-plugin-hipchat"
+
+[plugin.config]
+
+[plugin.compatibility]
