@@ -1,0 +1,15 @@
+main() {
+  # : {HIPCHAT_TOKEN:? required}
+  # : {HIPCHAT_ROOM_ID:? required}
+
+cat <<ENDOFMSG
+===========================
+[CONFIG] HIPCHAT_TOKEN=$HIPCHAT_TOKEN HIPCHAT_ROOM_ID=$HIPCHAT_ROOM_ID
+[EVENT] $1
+---------------------------
+$(cat)
+===========================
+ENDOFMSG
+}
+
+main "$@"
