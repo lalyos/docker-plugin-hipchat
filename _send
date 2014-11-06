@@ -1,15 +1,16 @@
 main() {
-  # : {HIPCHAT_TOKEN:? required}
-  # : {HIPCHAT_ROOM_ID:? required}
+  : {HIPCHAT_TOKEN:? required}
+  : {HIPCHAT_ROOM_ID:? required}
 
-cat <<ENDOFMSG
-===========================
-[CONFIG] HIPCHAT_TOKEN=$HIPCHAT_TOKEN HIPCHAT_ROOM_ID=$HIPCHAT_ROOM_ID
-[EVENT] $1
----------------------------
-$(cat)
-===========================
-ENDOFMSG
+  : ${CONFIG_MESSAGE_FORMAT:='"Container: " + $event + "  name=" + .Name + ", img=" + .Config.Image + ", host=" + .Config.Hostname'}
+
+  cat \
+    | jq --arg event $1 "$CONFIG_MESSAGE_FORMAT" -r \
+    | $(dirname $BASH_SOURCE)/hipchat_room_message \
+       -t $HIPCHAT_TOKEN \
+       -r $HIPCHAT_ROOM_ID \
+       -v v2 \
+       -f docker-plugin
 }
 
 main "$@"

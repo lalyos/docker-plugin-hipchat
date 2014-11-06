@@ -1,13 +1,12 @@
 [plugin]
 name = "docker-plugin-hipchat"
-description = "Send HipChat notifications"
+description = "Sends HipChat notifications"
 version = "1.0"
 maintainer_name = "Lajos Papp"
-maintainer_email = "lalyos@yahoo.com"
+maintainer_email = "lajos.papp@sequenceiq.com"
 website_url = "http://github.com/lalyos/docker-plugin-hipchat"
 
 [plugin.config]
-
-message_format = "{.name, .image}"
+message_format = "message template in jq style"
 
 [plugin.compatibility]
