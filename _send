@@ -36,4 +36,4 @@ main() {
        -f docker-plugin
 }
 
-[[ "$1" != "--test" ]] && main "$@" || test
+[[ "$UNIT_TEST" ]] || main "$@"
