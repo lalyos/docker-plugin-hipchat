@@ -1,17 +1,21 @@
 This is a [docker-plugin](https://github.com/progrium/docker-plugins) aims
 to send HipChat messages to a specific room at each docker event: start/stop/create/destroy ...
 
-## Authentication
+## Configuration
 
-Get your [personal API token](https://sequenceiq.hipchat.com/account/api), and
-set it as HIPCHAT_TOKEN
+You need 2 configuration value set as environment variable:
 
 ```
 export HIPCHAT_TOKEN=<40-ALFANUM>
 export HIPCHAT_ROOM_ID=<6-DIGITS>
 ```
 
-## Room id
+### Token
+
+You get your personal OAuth2 API token on the
+[account page](https://sequenceiq.hipchat.com/account/api)
+
+### Room id
 
 list hipchat room ids
 ```
@@ -32,6 +36,14 @@ docker run -it --rm \
   -e "HIPCHAT_ROOM_ID=$HIPCHAT_ROOM_ID" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   progrium/plugins
+```
+
+It will send messages like this:
+
+```
+Container: exists Name=/agitated_brown Image=progrium/plugins Hostname=1dd9490cba2b
+Container: create Name=/webserver Image=nginx Hostname=8f88d1bcf446
+Container: start Name=/webserver Image=nginx Hostname=8f88d1bcf446
 ```
 
 ## Message format
