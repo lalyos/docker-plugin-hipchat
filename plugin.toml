@@ -1,5 +1,5 @@
 [plugin]
-name = "docker-plugin-hipchat"
+name = "hipchat"
 description = "Sends HipChat notifications"
 version = "1.0"
 maintainer_name = "Lajos Papp"
@@ -7,6 +7,8 @@ maintainer_email = "lajos.papp@sequenceiq.com"
 website_url = "http://github.com/lalyos/docker-plugin-hipchat"
 
 [plugin.config]
-message_format = "message template in jq style"
+room_id = "6 digit API id of the room"
+token = "40 digit personal OAuth2 token"
+msg_fields = "coma separated json fields of the container like: .Name,.NetworkSettings.IPAddress"
 
 [plugin.compatibility]

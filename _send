@@ -1,16 +1,37 @@
-main() {
-  : {HIPCHAT_TOKEN:? required}
-  : {HIPCHAT_ROOM_ID:? required}
+DEFAULT_MSG_FIELDS=".Name,.Config.Image,.Config.Hostname"
 
-  : ${CONFIG_MESSAGE_FORMAT:='"Container: " + $event + "  name=" + .Name + ", img=" + .Config.Image + ", host=" + .Config.Hostname'}
+get_jq_filter() {
+  local fields_filter="\"Container: \" + \$event "
+
+  IFS=","
+  for field in ${CONFIG_MSG_FIELDS:-$DEFAULT_MSG_FIELDS}; do
+    fields_filter="${fields_filter} + \" ${field##*.}=\" + ${field} "
+  done
+  unset IFS
+
+  echo $fields_filter
+}
+
+test() {
+  docker inspect $(docker ps -ql)|jq .[0] \
+  | jq --arg event STARTED "$(get_jq_filter)"
+}
+
+# simulating dockerhook call:
+#     docker inspect $(docker ps -ql)|jq .[0]| ./_send HOOK
+main() {
+  declare hook="$1"
+  : ${hook:? required}
+  : ${CONFIG_TOKEN:?"required, defaults to HIPCHAT_TOKEN"}
+  : ${CONFIG_ROOM_ID:?"required, defauts to HIPCHAT_ROOM_ID"}
 
   cat \
-    | jq --arg event $1 "$CONFIG_MESSAGE_FORMAT" -r \
+    | jq --arg event "$hook" "$(get_jq_filter)" -r \
     | $(dirname $BASH_SOURCE)/hipchat_room_message \
-       -t $HIPCHAT_TOKEN \
-       -r $HIPCHAT_ROOM_ID \
+       -t $CONFIG_TOKEN \
+       -r $CONFIG_ROOM_ID \
        -v v2 \
        -f docker-plugin
 }
 
-main "$@"
+[[ "$1" != "--test" ]] && main "$@" || test
