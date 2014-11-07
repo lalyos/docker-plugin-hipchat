@@ -12,9 +12,9 @@ get_jq_filter() {
   echo $fields_filter
 }
 
-test() {
-  docker inspect $(docker ps -ql)|jq .[0] \
-  | jq --arg event STARTED "$(get_jq_filter)"
+fix_config() {
+  CONFIG_TOKEN="$HIPCHAT_TOKEN"
+  CONFIG_ROOM_ID="$HIPCHAT_ROOM_ID"
 }
 
 # simulating dockerhook call:
@@ -22,6 +22,8 @@ test() {
 main() {
   declare hook="$1"
   : ${hook:? required}
+  # until config name perfix depends on directory name
+  fix_config
   : ${CONFIG_TOKEN:?"required, defaults to HIPCHAT_TOKEN"}
   : ${CONFIG_ROOM_ID:?"required, defauts to HIPCHAT_ROOM_ID"}
 
